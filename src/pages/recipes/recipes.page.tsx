@@ -1,24 +1,40 @@
-import { useState } from "react";
-import { Pagination, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Pagination, TextField, Typography } from "@mui/material";
 
 import { Loading } from "@/libs/components/components";
+import { useDebounced } from "@/libs/hooks/hooks";
 
 import { RecipesList } from "@/modules/recipes/components/components";
-import { useRecipes } from "@/modules/recipes/hooks/use-recipes";
+import { useRecipes } from "@/modules/recipes/hooks/use-recipes.hook";
 
 const RecipesPage: React.FC = () => {
 	const [page, setPage] = useState(1);
+	const [search, setSearch] = useState("");
+
+	const {
+		value: debouncedSearch,
+		localValue: localSearchValue,
+		onChange: onSearchChange,
+	} = useDebounced({
+		value: search,
+		onChangeDelay: (value: string) => setSearch(value),
+	});
+
 	const { data, isSuccess, isLoading, isError, error, totalPages } = useRecipes(
 		{
-			search: "",
+			search: debouncedSearch,
 			itemsPerPage: 10,
 			currentPage: page,
 		},
 	);
 
-	const handleChange = (_e: React.ChangeEvent<unknown>, value: number) => {
+	const handlePageChange = (_e: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value);
 	};
+
+	useEffect(() => {
+		setPage(1);
+	}, [debouncedSearch]);
 
 	if (isError) {
 		throw error;
@@ -36,21 +52,26 @@ const RecipesPage: React.FC = () => {
 				Recipe Book
 			</Typography>
 
+			<TextField
+				label="Search Recipes"
+				variant="outlined"
+				fullWidth
+				value={localSearchValue}
+				onChange={(e) => onSearchChange(e.target.value)}
+				sx={{ mb: 4 }}
+			/>
+
 			{isLoading && <Loading />}
 
-			{isSuccess && (
-				<>
-					<RecipesList list={data} />
+			{isSuccess && <RecipesList list={data} />}
 
-					{totalPages > 1 && (
-						<Pagination
-							count={totalPages}
-							page={page}
-							onChange={handleChange}
-							sx={{ mt: 2 }}
-						/>
-					)}
-				</>
+			{totalPages > 1 && (
+				<Pagination
+					count={totalPages}
+					page={page}
+					onChange={handlePageChange}
+					sx={{ mt: 2 }}
+				/>
 			)}
 		</div>
 	);

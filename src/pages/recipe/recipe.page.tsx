@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
-import { useRecipe } from "@/modules/recipes/hooks/use-recipes";
+import { useRecipe } from "@/modules/recipes/hooks/use-recipes.hook";
 import { Loading, BackButton } from "@/libs/components/components";
 
 import { RecipeDetails } from "@/modules/recipes/components/components";

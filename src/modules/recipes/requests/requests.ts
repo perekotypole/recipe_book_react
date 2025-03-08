@@ -21,7 +21,7 @@ const getAllRecipes = async (search?: string): Promise<RecipesList> => {
 		meals: Array<RecipeItem>;
 	};
 
-	return data.meals.map(({ idMeal, strMeal, strMealThumb }) => ({
+	return (data.meals ?? []).map(({ idMeal, strMeal, strMealThumb }) => ({
 		idMeal,
 		strMeal,
 		strMealThumb,

@@ -1,4 +1,4 @@
-import { Grid2 as Grid } from "@mui/material";
+import { Grid2 as Grid, Typography } from "@mui/material";
 
 import type { RecipesList as TRecipesList } from "../../types/types";
 import { RecipesCard } from "../recipes-card/recipes-card";
@@ -8,6 +8,12 @@ type RecipesListProperties = {
 };
 
 const RecipesList: React.FC<RecipesListProperties> = ({ list }) => {
+	if (list.length === 0) {
+		return (
+			<Typography variant="body1">We couldn't find any recipes</Typography>
+		);
+	}
+
 	return (
 		<Grid container spacing={3}>
 			{list.map((item) => (
