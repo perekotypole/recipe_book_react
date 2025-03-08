@@ -18,7 +18,7 @@ const RecipesList: React.FC<RecipesListProperties> = ({ list }) => {
 		<Grid container spacing={3}>
 			{list.map((item) => (
 				<Grid key={item.idMeal} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-					<RecipesCard {...item} />
+					<RecipesCard item={item} isLink />
 				</Grid>
 			))}
 		</Grid>

@@ -1,4 +1,4 @@
-import { Button, Box, Typography, Divider } from "@mui/material";
+import { Button, Box, Typography, Divider, Stack } from "@mui/material";
 
 import { BackButton } from "@/libs/components/components";
 
@@ -30,15 +30,20 @@ const RecipesCartPage: React.FC = () => {
 					<Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
 						{cart.map((recipe) => (
 							<Box key={recipe.idMeal}>
-								<RecipesCard {...recipe} />
-
-								<Button
-									onClick={() => removeFromCart(recipe.idMeal)}
-									color="error"
-									sx={{ mt: 1 }}
-								>
-									Remove
-								</Button>
+								<RecipesCard
+									item={recipe}
+									BottomComponent={
+										<Stack>
+											<Button
+												onClick={() => removeFromCart(recipe.idMeal)}
+												color="error"
+												size="small"
+											>
+												Remove
+											</Button>
+										</Stack>
+									}
+								/>
 							</Box>
 						))}
 					</Box>

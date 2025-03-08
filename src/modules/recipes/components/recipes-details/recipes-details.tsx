@@ -9,11 +9,11 @@ import {
 	Typography,
 } from "@mui/material";
 
-import type { RecipeDetails } from "../../types/types";
+import type { RecipeDetails as TRecipeDetails } from "../../types/types";
 import { RecipeIngredients } from "../recipe-ingredients/recipe-ingredients";
 import { useCart } from "../../storages/cart.storage";
 
-type RecipeDetailsProperties = RecipeDetails;
+type RecipeDetailsProperties = TRecipeDetails;
 
 const RecipeDetails: React.FC<RecipeDetailsProperties> = (item) => {
 	const navigate = useNavigate();
