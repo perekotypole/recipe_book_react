@@ -1,27 +1,17 @@
 import { Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
-import type { RecipesList as TRecipesList } from "@/modules/recipes/types/types";
+import { Loading } from "@/libs/components/components";
+
 import { RecipesList } from "@/modules/recipes/components/components";
-
-const items: TRecipesList = [
-	{
-		idMeal: 1,
-		strMeal: "meal 1",
-		strMealThumb: "",
-	},
-	{
-		idMeal: 2,
-		strMeal: "meal 2",
-		strMealThumb: "",
-	},
-	{
-		idMeal: 3,
-		strMeal: "meal 3",
-		strMealThumb: "",
-	},
-];
+import { getAllRecipes } from "@/modules/recipes/requests/requests";
 
 const RecipesPage: React.FC = () => {
+	const { data, isSuccess, isLoading } = useQuery({
+		queryKey: ["recipes"],
+		queryFn: () => getAllRecipes(),
+	});
+
 	return (
 		<div>
 			<Typography
@@ -34,7 +24,8 @@ const RecipesPage: React.FC = () => {
 				Recipe Book
 			</Typography>
 
-			<RecipesList list={items} />
+			{isLoading && <Loading />}
+			{isSuccess && <RecipesList list={data} />}
 		</div>
 	);
 };
