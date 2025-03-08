@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { Pagination, TextField, Typography } from "@mui/material";
+import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
 
 import { Loading } from "@/libs/components/components";
 import { useDebounced } from "@/libs/hooks/hooks";
 
 import { RecipesList } from "@/modules/recipes/components/components";
-import { useRecipes } from "@/modules/recipes/hooks/use-recipes.hook";
+import {
+	useCategories,
+	useRecipes,
+} from "@/modules/recipes/hooks/use-recipes.hook";
 
 const RecipesPage: React.FC = () => {
 	const [page, setPage] = useState(1);
 	const [search, setSearch] = useState("");
+	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+	const { data: categories, isSuccess: isCategoriesSuccess } = useCategories();
 
 	const {
 		value: debouncedSearch,
@@ -25,6 +31,7 @@ const RecipesPage: React.FC = () => {
 			search: debouncedSearch,
 			itemsPerPage: 10,
 			currentPage: page,
+			category: selectedCategory,
 		},
 	);
 
@@ -32,9 +39,13 @@ const RecipesPage: React.FC = () => {
 		setPage(value);
 	};
 
+	const handleCategoryChange = (category: string) => {
+		setSelectedCategory(selectedCategory !== category ? category : null);
+	};
+
 	useEffect(() => {
 		setPage(1);
-	}, [debouncedSearch]);
+	}, [debouncedSearch, selectedCategory]);
 
 	if (isError) {
 		throw error;
@@ -60,6 +71,30 @@ const RecipesPage: React.FC = () => {
 				onChange={(e) => onSearchChange(e.target.value)}
 				sx={{ mb: 4 }}
 			/>
+
+			{isCategoriesSuccess && (
+				<Box sx={{ mb: 3 }}>
+					<Typography variant="h6">Filter by Category:</Typography>
+
+					<Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+						{categories.map((category) => (
+							<Button
+								key={category.strCategory}
+								color="primary"
+								size="small"
+								variant={
+									selectedCategory === category.strCategory
+										? "contained"
+										: "outlined"
+								}
+								onClick={() => handleCategoryChange(category.strCategory)}
+							>
+								{category.strCategory}
+							</Button>
+						))}
+					</Box>
+				</Box>
+			)}
 
 			{isLoading && <Loading />}
 
