@@ -1,5 +1,3 @@
-"use server";
-
 import qs from "qs";
 
 import { RecipeItem, RecipesList } from "../types/types";

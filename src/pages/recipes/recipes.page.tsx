@@ -1,16 +1,16 @@
 import { Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 
 import { Loading } from "@/libs/components/components";
 
 import { RecipesList } from "@/modules/recipes/components/components";
-import { getAllRecipes } from "@/modules/recipes/requests/requests";
+import { useRecipes } from "@/modules/recipes/hooks/use-recipes";
 
 const RecipesPage: React.FC = () => {
-	const { data, isSuccess, isLoading } = useQuery({
-		queryKey: ["recipes"],
-		queryFn: () => getAllRecipes(),
-	});
+	const { data, isSuccess, isLoading, isError, error } = useRecipes("");
+
+	if (isError) {
+		throw error;
+	}
 
 	return (
 		<div>

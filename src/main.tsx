@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { DefaultLayout } from "@/libs/layouts/layouts";
-import { RecipesPage } from "@/pages/pages";
+import { NotFound, RecipesPage } from "@/pages/pages";
 
 import { theme } from "./theme";
 import { ErrorBoundary } from "react-error-boundary";
@@ -43,6 +43,10 @@ const router = createBrowserRouter([
 						<RecipesPage />
 					</ErrorBoundary>
 				),
+			},
+			{
+				path: "*",
+				element: <NotFound />,
 			},
 		],
 	},
