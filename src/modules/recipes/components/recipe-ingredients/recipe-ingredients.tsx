@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
 	Checkbox,
 	List,
@@ -8,28 +7,14 @@ import {
 } from "@mui/material";
 
 import type { IngredientsList } from "@/modules/recipes/types/types";
+import { useRecipeIngredients } from "./recipe-ingredients.hook";
 
-type RecipeIngredientsProperties = {
+export type RecipeIngredientsProperties = {
 	ingredients: IngredientsList;
 };
 
-const RecipeIngredients: React.FC<RecipeIngredientsProperties> = ({
-	ingredients,
-}) => {
-	const [checked, setChecked] = useState<Array<number>>([]);
-
-	const handleToggle = (value: number) => () => {
-		const currentIndex = checked.indexOf(value);
-		const newChecked = [...checked];
-
-		if (currentIndex === -1) {
-			newChecked.push(value);
-		} else {
-			newChecked.splice(currentIndex, 1);
-		}
-
-		setChecked(newChecked);
-	};
+const RecipeIngredients: React.FC<RecipeIngredientsProperties> = (props) => {
+	const { ingredients, handleToggle, checked } = useRecipeIngredients(props);
 
 	return (
 		<List>
