@@ -29,7 +29,11 @@ const getAllRecipes = async (search?: string): Promise<RecipesList> => {
 };
 
 const getRecipeById = async (id: number): Promise<RecipeItem | null> => {
-	const url = `${baseUrl}/lookup.php${id}`;
+	const paramsQuery = {
+		i: String(id),
+	};
+	const paramsStr = qs.stringify(paramsQuery, { encode: false });
+	const url = `${baseUrl}/lookup.php?${paramsStr}`;
 
 	const res = await fetch(url);
 
@@ -41,11 +45,19 @@ const getRecipeById = async (id: number): Promise<RecipeItem | null> => {
 		}
 	}
 
-	const data = (await res.json()) as {
-		meals: Array<RecipeItem>;
-	};
+	const data = await res.json();
 
-	return data.meals.at(0) ?? null;
+	if (!Array.isArray(data.meals)) {
+		throw new Error(data.meals);
+	}
+
+	return (
+		(
+			data as {
+				meals: Array<RecipeItem>;
+			}
+		).meals.at(0) ?? null
+	);
 };
 
 export { getAllRecipes, getRecipeById };

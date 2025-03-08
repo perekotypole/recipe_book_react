@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { DefaultLayout } from "@/libs/layouts/layouts";
-import { NotFound, RecipesPage } from "@/pages/pages";
+import { NotFound, RecipePage, RecipesPage } from "@/pages/pages";
 
 import { theme } from "./theme";
 import { ErrorBoundary } from "react-error-boundary";
@@ -24,25 +24,17 @@ const router = createBrowserRouter([
 					queryClient.clear();
 				}}
 			>
-				<DefaultLayout />{" "}
+				<DefaultLayout />
 			</ErrorBoundary>
 		),
 		children: [
 			{
 				path: "/",
-				element: (
-					<ErrorBoundary
-						FallbackComponent={ErrorFallback}
-						onError={(error, info) => {
-							console.error("Caught an error:", error, info);
-						}}
-						onReset={() => {
-							queryClient.clear();
-						}}
-					>
-						<RecipesPage />
-					</ErrorBoundary>
-				),
+				element: <RecipesPage />,
+			},
+			{
+				path: "/recipe/:id",
+				element: <RecipePage />,
 			},
 			{
 				path: "*",

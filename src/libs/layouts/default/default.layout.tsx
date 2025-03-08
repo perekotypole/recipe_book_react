@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 
 const DefaultLayout: React.FC = () => {
 	return (
-		<Container maxWidth="lg" style={{ padding: "15px" }}>
+		<Container maxWidth="lg" style={{ padding: "45px 15px" }}>
 			<Outlet />
 		</Container>
 	);
