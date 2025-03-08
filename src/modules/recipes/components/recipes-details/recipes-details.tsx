@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import type { RecipeDetails as TRecipeDetails } from "../../types/types";
-import { RecipeIngredients } from "../recipe-ingredients/recipe-ingredients";
+import { RecipeIngredients } from "../components";
 import { useCart } from "../../storages/cart.storage";
 
 type RecipeDetailsProperties = TRecipeDetails;
