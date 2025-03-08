@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import type { RecipeItem } from "../../types/types";
-import { RecipeIngredients } from "./libs/components/recipe-ingredients/recipe-ingredients";
+import { RecipeIngredients } from "./libs/components/components";
 
 type RecipeDetailsProperties = RecipeItem;
 
