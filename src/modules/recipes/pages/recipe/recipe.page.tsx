@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
-import { useRecipe } from "@/modules/recipes/hooks/use-recipes.hook";
+import { NotFound } from "@/pages/pages";
 import { Loading, BackButton } from "@/libs/components/components";
 
+import { useRecipe } from "@/modules/recipes/storages/storages";
 import { RecipeDetails } from "@/modules/recipes/components/components";
-
-import { NotFound } from "../pages";
 
 const RecipePage: React.FC = () => {
 	const { id } = useParams();
@@ -21,7 +20,7 @@ const RecipePage: React.FC = () => {
 	}
 
 	return (
-		<div>
+		<Box>
 			<Box sx={{ mb: 2 }}>
 				<BackButton />
 			</Box>
@@ -32,7 +31,6 @@ const RecipePage: React.FC = () => {
 				<>
 					<Typography
 						variant="h2"
-						component="h2"
 						sx={{
 							marginBottom: 4,
 						}}
@@ -43,7 +41,7 @@ const RecipePage: React.FC = () => {
 					<RecipeDetails {...data} />
 				</>
 			)}
-		</div>
+		</Box>
 	);
 };
 

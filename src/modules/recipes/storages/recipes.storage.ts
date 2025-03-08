@@ -1,33 +1,12 @@
+import { useEffect, useState } from "react";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 
-import type { CategoryItem, RecipeItem, RecipesList } from "../types/types";
-import {
-	getAllRecipes,
-	getCategories,
-	getRecipeById,
-} from "../requests/requests";
-import { useEffect, useState } from "react";
+import type { RecipeDetails, RecipesList } from "../types/types";
+import { getAllRecipes, getRecipeById } from "../requests/requests";
 
 const queryKeys = {
 	recipes: ["recipes"],
 	recipe: (id: string) => ["recipes", id],
-	categories: ["categories"],
-};
-
-const useRecipesQuery = (
-	search: string,
-): UseQueryResult<RecipesList, Error> => {
-	return useQuery({
-		queryKey: ["recipes", search],
-		queryFn: () => getAllRecipes(search),
-	});
-};
-
-type UseRecipesProperties = {
-	search: string;
-	itemsPerPage: number;
-	currentPage: number;
-	category: string | null;
 };
 
 const useRecipes = ({
@@ -35,8 +14,16 @@ const useRecipes = ({
 	itemsPerPage,
 	currentPage,
 	category,
-}: UseRecipesProperties) => {
-	const { data, ...queryData } = useRecipesQuery(search);
+}: {
+	search: string;
+	itemsPerPage: number;
+	currentPage: number;
+	category: string | null;
+}) => {
+	const { data, ...queryData } = useQuery({
+		queryKey: ["recipes", search],
+		queryFn: () => getAllRecipes(search),
+	});
 
 	const [paginatedData, setPaginatedData] = useState<RecipesList>([]);
 	const [totalPages, setTotalPages] = useState<number>(0);
@@ -64,7 +51,7 @@ const useRecipes = ({
 	};
 };
 
-const useRecipe = (id: number): UseQueryResult<RecipeItem, Error> => {
+const useRecipe = (id: number): UseQueryResult<RecipeDetails | null, Error> => {
 	return useQuery({
 		queryKey: queryKeys.recipe(String(id)),
 		queryFn: () => getRecipeById(id),
@@ -72,11 +59,4 @@ const useRecipe = (id: number): UseQueryResult<RecipeItem, Error> => {
 	});
 };
 
-const useCategories = (): UseQueryResult<Array<CategoryItem>, Error> => {
-	return useQuery({
-		queryKey: queryKeys.categories,
-		queryFn: () => getCategories(),
-	});
-};
-
-export { queryKeys as recipeQueryKeys, useRecipes, useRecipe, useCategories };
+export { useRecipes, useRecipe };

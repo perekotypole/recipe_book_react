@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+import { useNavigate } from "react-router";
 import {
 	Box,
 	Button,
@@ -7,12 +9,21 @@ import {
 	Typography,
 } from "@mui/material";
 
-import type { RecipeItem } from "../../types/types";
-import { RecipeIngredients } from "./libs/components/components";
+import type { RecipeDetails } from "../../types/types";
+import { RecipeIngredients } from "../recipe-ingredients/recipe-ingredients";
+import { useCart } from "../../storages/cart.storage";
 
-type RecipeDetailsProperties = RecipeItem;
+type RecipeDetailsProperties = RecipeDetails;
 
 const RecipeDetails: React.FC<RecipeDetailsProperties> = (item) => {
+	const navigate = useNavigate();
+	const { addToCart } = useCart();
+
+	const handleWantToCookClick = useCallback(() => {
+		addToCart(item);
+		navigate("/cart");
+	}, [navigate, addToCart, item]);
+
 	return (
 		<Box padding={3}>
 			<Card>
@@ -24,8 +35,19 @@ const RecipeDetails: React.FC<RecipeDetailsProperties> = (item) => {
 					image={item.strMealThumb}
 					alt={item.strMeal}
 				/>
+
 				<CardContent>
-					<Typography variant="h4">{item.strMeal}</Typography>
+					<Typography variant="h4">
+						{item.strMeal}{" "}
+						<Button
+							variant="contained"
+							color="secondary"
+							onClick={handleWantToCookClick}
+							size="small"
+						>
+							want to cook
+						</Button>
+					</Typography>
 
 					<Typography variant="subtitle1" color="textSecondary">
 						{item.strCategory} | {item.strArea}
@@ -38,7 +60,7 @@ const RecipeDetails: React.FC<RecipeDetailsProperties> = (item) => {
 					<Box>
 						<Typography variant="h6">Ingredients:</Typography>
 
-						<RecipeIngredients {...item} />
+						<RecipeIngredients ingredients={item.ingredients} />
 					</Box>
 
 					{item.strYoutube && (

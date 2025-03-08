@@ -1,16 +1,26 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
+
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import {
+	ErrorFallback,
+	queryClient,
+	QueryProvider,
+} from "@/libs/components/components";
 import { DefaultLayout } from "@/libs/layouts/layouts";
-import { NotFound, RecipePage, RecipesPage } from "@/pages/pages";
+import { NotFound } from "@/pages/pages";
+
+import {
+	RecipePage,
+	RecipesCartPage,
+	RecipesPage,
+} from "@/modules/recipes/pages/pages";
 
 import { theme } from "./theme";
-import { ErrorBoundary } from "react-error-boundary";
-import { ErrorFallback } from "./libs/components/error-fallback/error-fallback";
 
 const router = createBrowserRouter([
 	{
@@ -37,6 +47,10 @@ const router = createBrowserRouter([
 				element: <RecipePage />,
 			},
 			{
+				path: "/cart",
+				element: <RecipesCartPage />,
+			},
+			{
 				path: "*",
 				element: <NotFound />,
 			},
@@ -44,16 +58,14 @@ const router = createBrowserRouter([
 	},
 ]);
 
-const queryClient = new QueryClient();
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 
-			<QueryClientProvider client={queryClient}>
+			<QueryProvider>
 				<RouterProvider router={router} />
-			</QueryClientProvider>
+			</QueryProvider>
 		</ThemeProvider>
 	</React.StrictMode>,
 );

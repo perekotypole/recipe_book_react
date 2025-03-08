@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
 	Checkbox,
 	List,
@@ -7,19 +7,15 @@ import {
 	ListItemText,
 } from "@mui/material";
 
-import type { RecipeItem } from "@/modules/recipes/types/types";
-import { getIngredients } from "../../helpers/get-ingredients";
+import type { IngredientsList } from "@/modules/recipes/types/types";
 
-type RecipeIngredientsProperties = RecipeItem;
+type RecipeIngredientsProperties = {
+	ingredients: IngredientsList;
+};
 
-const RecipeIngredients: React.FC<RecipeIngredientsProperties> = (item) => {
-	const ingredients = useMemo<
-		Array<{
-			ingredient: string;
-			measure: string;
-		}>
-	>(() => getIngredients(item), [item]);
-
+const RecipeIngredients: React.FC<RecipeIngredientsProperties> = ({
+	ingredients,
+}) => {
 	const [checked, setChecked] = useState<Array<number>>([]);
 
 	const handleToggle = (value: number) => () => {

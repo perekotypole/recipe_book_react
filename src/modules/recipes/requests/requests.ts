@@ -1,6 +1,12 @@
 import qs from "qs";
 
-import { CategoryItem, RecipeItem, RecipesList } from "../types/types";
+import {
+	CategoryItem,
+	RecipeDetails,
+	RecipeItem,
+	RecipesList,
+} from "../types/types";
+import { getIngredients } from "../helpers/get-ingredients.helper";
 
 const baseUrl = "https://www.themealdb.com/api/json/v1/1";
 
@@ -32,7 +38,7 @@ const getAllRecipes = async (search?: string): Promise<RecipesList> => {
 	);
 };
 
-const getRecipeById = async (id: number): Promise<RecipeItem | null> => {
+const getRecipeById = async (id: number): Promise<RecipeDetails | null> => {
 	const paramsQuery = {
 		i: String(id),
 	};
@@ -55,13 +61,18 @@ const getRecipeById = async (id: number): Promise<RecipeItem | null> => {
 		throw new Error(data.meals);
 	}
 
-	return (
-		(
-			data as {
-				meals: Array<RecipeItem>;
-			}
-		).meals.at(0) ?? null
-	);
+	const item = (data as { meals: Array<RecipeItem> }).meals.at(0) ?? null;
+
+	if (item === null) {
+		return null;
+	}
+
+	const ingredients = getIngredients(item);
+
+	return {
+		...item,
+		ingredients,
+	};
 };
 
 const getCategories = async (): Promise<Array<CategoryItem>> => {

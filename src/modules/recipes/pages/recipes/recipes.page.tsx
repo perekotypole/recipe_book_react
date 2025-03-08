@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Pagination,
+	Stack,
+	TextField,
+	Typography,
+} from "@mui/material";
 
 import { Loading } from "@/libs/components/components";
 import { useDebounced } from "@/libs/hooks/hooks";
 
 import { RecipesList } from "@/modules/recipes/components/components";
-import {
-	useCategories,
-	useRecipes,
-} from "@/modules/recipes/hooks/use-recipes.hook";
+import { useCategories, useRecipes } from "@/modules/recipes/storages/storages";
 
 const RecipesPage: React.FC = () => {
 	const [page, setPage] = useState(1);
@@ -24,6 +28,7 @@ const RecipesPage: React.FC = () => {
 	} = useDebounced({
 		value: search,
 		onChangeDelay: (value: string) => setSearch(value),
+		delay: 1000,
 	});
 
 	const { data, isSuccess, isLoading, isError, error, totalPages } = useRecipes(
@@ -52,16 +57,21 @@ const RecipesPage: React.FC = () => {
 	}
 
 	return (
-		<div>
-			<Typography
-				variant="h2"
-				component="h2"
+		<Box>
+			<Stack
+				direction={"row"}
+				alignItems={"center"}
+				justifyContent={"space-between"}
 				sx={{
 					marginBottom: 4,
 				}}
 			>
-				Recipe Book
-			</Typography>
+				<Typography variant="h2">Recipe Book</Typography>
+
+				<Button variant="contained" color="secondary" size="small" href="/cart">
+					Selected Recipes
+				</Button>
+			</Stack>
 
 			<TextField
 				label="Search Recipes"
@@ -108,7 +118,7 @@ const RecipesPage: React.FC = () => {
 					sx={{ mt: 2 }}
 				/>
 			)}
-		</div>
+		</Box>
 	);
 };
 
